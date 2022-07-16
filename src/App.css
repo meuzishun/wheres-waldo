@@ -1,3 +1,9 @@
+.App {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
 /* header styles */
 header {
   display: flex;
@@ -85,4 +91,15 @@ header li {
 
 .scoreContainer > p {
   font-size: 1.25rem;
+}
+
+/* footer styles */
+footer {
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #3b82f6;
+  color: #fff;
+  font-size: 1.2rem;
 }
