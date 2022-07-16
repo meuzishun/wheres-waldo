@@ -1,0 +1,34 @@
+/* header styles */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+}
+
+header > h2,
+header li {
+  text-transform: capitalize;
+}
+
+header > nav > ul {
+  display: flex;
+  gap: 2rem;
+}
+
+header h2,
+#waldo {
+  font-size: 2rem;
+  color: #3b82f6;
+}
+
+#waldo {
+  color: #ef4444;
+}
+
+header li {
+  padding: 1rem 1rem;
+  background-color: #f87171;
+  color: #fff;
+  border-radius: 0.4rem;
+}
