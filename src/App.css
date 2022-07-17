@@ -32,11 +32,12 @@ header h2,
   color: #ef4444;
 }
 
-header li {
+header li a {
   padding: 1rem 1rem;
   background-color: #f87171;
-  color: #fff;
   border-radius: 0.4rem;
+  text-decoration: none;
+  color: #fff;
 }
 
 /* new game styles */
@@ -61,14 +62,15 @@ header li {
   gap: 4rem;
 }
 
-.pictureContainer > img {
-  width: 100%;
+.pictureContainer img {
   border-radius: 1rem;
+  width: 100%;
 }
 
 /* game styles */
 .gamePicture > img {
   width: 100%;
+  display: block;
 }
 
 /* high scores styles */

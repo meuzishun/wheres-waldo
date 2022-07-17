@@ -1,9 +1,9 @@
 import React from 'react';
 
-function Game() {
+function Game({ gamePic }) {
   return (
     <div className='gamePicture'>
-      <img src='./assets/beach.jpg' />
+      <img src={gamePic} alt='gamePic' />
     </div>
   );
 }

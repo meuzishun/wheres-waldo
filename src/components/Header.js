@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Header() {
   return (
@@ -8,8 +9,12 @@ function Header() {
       </h2>
       <nav>
         <ul>
-          <li>new game</li>
-          <li>high scores</li>
+          <li>
+            <Link to='/'>new game</Link>
+          </li>
+          <li>
+            <Link to='highscores'>high scores</Link>
+          </li>
         </ul>
       </nav>
     </header>
