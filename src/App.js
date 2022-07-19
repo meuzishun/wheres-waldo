@@ -3,7 +3,7 @@ import { initializeApp } from 'firebase/app';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
-import { getFirestore, collection, doc, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -63,8 +63,6 @@ function App() {
       });
 
     const scoresCollection = collection(db, 'scores');
-
-    //* Render todos from database
 
     getDocs(scoresCollection).then((snapshot) => {
       const scoresDocs = snapshot.docs.map((doc) => {
