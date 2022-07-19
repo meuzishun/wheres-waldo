@@ -2,14 +2,17 @@
 import { initializeApp } from 'firebase/app';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-import React, { useState } from 'react';
-import './App.css';
+import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
+
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 import Header from './components/Header';
 import Game from './components/Game';
 import NewGame from './components/NewGame';
 import HighScores from './components/HighScores';
 import Footer from './components/Footer';
+import './App.css';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -21,9 +24,12 @@ const firebaseConfig = {
   appId: '1:462284750954:web:256577b4667fcb2b190a13',
 };
 // Initialize Firebase
-const backendApp = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
+
+const storage = getStorage();
 
 function App() {
+  const [pictures, setPictures] = useState([]);
   const [gamePic, setGamePic] = useState(undefined);
 
   const handlePicClick = (e) => {
@@ -33,6 +39,27 @@ function App() {
     document.documentElement.scrollTop = 0;
   };
 
+  useEffect(() => {
+    const waldoPictures = ref(storage, 'waldo_images');
+
+    listAll(waldoPictures)
+      .then((res) => {
+        res.items.forEach((item) => {
+          getDownloadURL(ref(storage, item.fullPath)).then((url) => {
+            setPictures((prev) => {
+              if (!prev.includes(url)) {
+                return [...prev, url];
+              }
+              return prev;
+            });
+          });
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <div className='App'>
       <BrowserRouter>
@@ -40,13 +67,16 @@ function App() {
         <Routes>
           <Route
             path='/'
-            element={<NewGame handlePicClick={handlePicClick} />}
+            element={
+              <NewGame pictures={pictures} handlePicClick={handlePicClick} />
+            }
           />
           <Route path='/game' element={<Game gamePic={gamePic} />} />
           <Route path='/highscores' element={<HighScores />} />
         </Routes>
         <Footer />
       </BrowserRouter>
+      {console.log('App rendered')}
     </div>
   );
 }

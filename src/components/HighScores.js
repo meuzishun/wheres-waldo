@@ -29,6 +29,7 @@ function HighScores() {
           <p className='userScore'>45.37sec</p>
         </div>
       </div>
+      {console.log('HighScores rendered')}
     </div>
   );
 }
