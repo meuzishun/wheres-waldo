@@ -36,7 +36,6 @@ function App() {
   const [scores, setScores] = useState([]);
 
   const handlePicClick = (e) => {
-    console.log(e.target);
     setGamePic(e.target.src);
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0;
@@ -68,7 +67,6 @@ function App() {
       const scoresDocs = snapshot.docs.map((doc) => {
         return { ...doc.data(), id: doc.id };
       });
-      console.log(scoresDocs);
       setScores(scoresDocs);
     });
   }, []);

@@ -79,6 +79,20 @@ header li a {
   display: block;
 }
 
+.boxCursor {
+  position: fixed;
+  display: inline-block;
+  border-radius: 5%;
+  border: 2px dashed black;
+  width: 60px;
+  height: 60px;
+  left: 20px;
+  right: 0;
+  transition: transform 0.2s ease, opacity 0.2s ease, border-color 0.2s ease,
+    background-color 0.2s ease;
+  pointer-events: none;
+}
+
 /* high scores styles */
 .highScoresPage {
   padding: 4rem;
