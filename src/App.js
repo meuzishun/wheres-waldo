@@ -3,6 +3,7 @@ import { initializeApp } from 'firebase/app';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
+import { getFirestore, collection, doc, getDocs } from 'firebase/firestore';
 
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -24,13 +25,15 @@ const firebaseConfig = {
   appId: '1:462284750954:web:256577b4667fcb2b190a13',
 };
 // Initialize Firebase
-initializeApp(firebaseConfig);
+const firebaseApp = initializeApp(firebaseConfig);
 
 const storage = getStorage();
+const db = getFirestore(firebaseApp);
 
 function App() {
   const [pictures, setPictures] = useState([]);
   const [gamePic, setGamePic] = useState(undefined);
+  const [scores, setScores] = useState([]);
 
   const handlePicClick = (e) => {
     console.log(e.target);
@@ -58,6 +61,18 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
+
+    const scoresCollection = collection(db, 'scores');
+
+    //* Render todos from database
+
+    getDocs(scoresCollection).then((snapshot) => {
+      const scoresDocs = snapshot.docs.map((doc) => {
+        return { ...doc.data(), id: doc.id };
+      });
+      console.log(scoresDocs);
+      setScores(scoresDocs);
+    });
   }, []);
 
   return (
@@ -72,7 +87,7 @@ function App() {
             }
           />
           <Route path='/game' element={<Game gamePic={gamePic} />} />
-          <Route path='/highscores' element={<HighScores />} />
+          <Route path='/highscores' element={<HighScores scores={scores} />} />
         </Routes>
         <Footer />
       </BrowserRouter>

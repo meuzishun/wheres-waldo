@@ -1,33 +1,20 @@
 import React from 'react';
+import Score from './Score';
 
-function HighScores() {
+function HighScores({ scores }) {
+  console.log(scores);
   return (
     <div className='highScoresPage'>
       <div className='highScoresContainer'>
-        <div className='scoreContainer'>
-          <p className='userName'>username1</p>
-          <p className='userScore'>45.37sec</p>
-        </div>
-        <div className='scoreContainer'>
-          <p className='userName'>username1</p>
-          <p className='userScore'>45.37sec</p>
-        </div>
-        <div className='scoreContainer'>
-          <p className='userName'>username1</p>
-          <p className='userScore'>45.37sec</p>
-        </div>
-        <div className='scoreContainer'>
-          <p className='userName'>username1</p>
-          <p className='userScore'>45.37sec</p>
-        </div>
-        <div className='scoreContainer'>
-          <p className='userName'>username1</p>
-          <p className='userScore'>45.37sec</p>
-        </div>
-        <div className='scoreContainer'>
-          <p className='userName'>username1</p>
-          <p className='userScore'>45.37sec</p>
-        </div>
+        {scores
+          ? scores.map((score) => (
+              <Score
+                key={score.id}
+                username={score.username}
+                score={score.score}
+              />
+            ))
+          : null}
       </div>
       {console.log('HighScores rendered')}
     </div>
