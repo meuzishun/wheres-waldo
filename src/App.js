@@ -3,7 +3,13 @@ import { initializeApp } from 'firebase/app';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+} from 'firebase/firestore';
 
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -41,35 +47,67 @@ function App() {
     document.documentElement.scrollTop = 0;
   };
 
-  useEffect(() => {
-    const waldoPictures = ref(storage, 'waldo_images');
-
-    listAll(waldoPictures)
-      .then((res) => {
-        res.items.forEach((item) => {
-          getDownloadURL(ref(storage, item.fullPath)).then((url) => {
-            setPictures((prev) => {
-              if (!prev.includes(url)) {
-                return [...prev, url];
-              }
-              return prev;
-            });
-          });
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    const scoresCollection = collection(db, 'scores');
-
-    getDocs(scoresCollection).then((snapshot) => {
-      const scoresDocs = snapshot.docs.map((doc) => {
-        return { ...doc.data(), id: doc.id };
-      });
-      setScores(scoresDocs);
+  const checkCoords = (record) => {
+    const docRef = doc(db, 'locations', record.fileName);
+    getDoc(docRef).then((snapshot) => {
+      const data = snapshot.data();
+      if (
+        data.x >= record.coordinates.x1 &&
+        data.x <= record.coordinates.x2 &&
+        data.y >= record.coordinates.y1 &&
+        data.y <= record.coordinates.y2
+      ) {
+        //TODO: do something if they are and do something else if they do not...
+        console.log('You found Waldo!');
+      } else {
+        console.log('Nope...');
+      }
     });
+  };
+
+  useEffect(() => {
+    setPictures([
+      './tempAssets/beach.jpg',
+      './tempAssets/gobbling.jpg',
+      './tempAssets/racing.jpg',
+      './tempAssets/skiing.jpg',
+      './tempAssets/space.jpg',
+      './tempAssets/worldwide.jpg',
+    ]);
   }, []);
+
+  //! SAVE THIS CODE
+  //!===========================================================================
+  // useEffect(() => {
+  //   const waldoPictures = ref(storage, 'waldo_images');
+
+  //   listAll(waldoPictures)
+  //     .then((res) => {
+  //       res.items.forEach((item) => {
+  //         getDownloadURL(ref(storage, item.fullPath)).then((url) => {
+  //           setPictures((prev) => {
+  //             if (!prev.includes(url)) {
+  //               return [...prev, url];
+  //             }
+  //             return prev;
+  //           });
+  //         });
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+
+  //   const scoresCollection = collection(db, 'scores');
+
+  //   getDocs(scoresCollection).then((snapshot) => {
+  //     const scoresDocs = snapshot.docs.map((doc) => {
+  //       return { ...doc.data(), id: doc.id };
+  //     });
+  //     setScores(scoresDocs);
+  //   });
+  // }, []);
+  //!===========================================================================
 
   return (
     <div className='App'>
@@ -82,7 +120,10 @@ function App() {
               <NewGame pictures={pictures} handlePicClick={handlePicClick} />
             }
           />
-          <Route path='/game' element={<Game gamePic={gamePic} />} />
+          <Route
+            path='/game'
+            element={<Game gamePic={gamePic} checkCoords={checkCoords} />}
+          />
           <Route path='/highscores' element={<HighScores scores={scores} />} />
         </Routes>
         <Footer />
