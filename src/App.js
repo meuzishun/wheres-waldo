@@ -36,6 +36,30 @@ const firebaseApp = initializeApp(firebaseConfig);
 const storage = getStorage();
 const db = getFirestore(firebaseApp);
 
+const timer = (() => {
+  let startTime;
+  let endTime;
+
+  const start = () => {
+    startTime = Date.now();
+    endTime = undefined;
+  };
+
+  const stop = () => {
+    endTime = Date.now();
+  };
+
+  const getTotalTime = () => {
+    return `${(endTime - startTime) / 1000} seconds`;
+  };
+
+  return {
+    start,
+    stop,
+    getTotalTime,
+  };
+})();
+
 function App() {
   const [pictures, setPictures] = useState([]);
   const [gamePic, setGamePic] = useState(undefined);
@@ -45,6 +69,7 @@ function App() {
     setGamePic(e.target.src);
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0;
+    timer.start();
   };
 
   const checkCoords = (record) => {
@@ -59,12 +84,15 @@ function App() {
       ) {
         //TODO: do something if they are and do something else if they do not...
         console.log('You found Waldo!');
+        timer.stop();
+        console.log(`It took you: ${timer.getTotalTime()}`);
       } else {
         console.log('Nope...');
       }
     });
   };
 
+  //* This is temporarily for getting game pictures to not tap the database too much in development
   useEffect(() => {
     setPictures([
       './tempAssets/beach.jpg',
