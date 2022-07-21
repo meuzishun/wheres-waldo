@@ -21,6 +21,8 @@ import HighScores from './components/HighScores';
 import Footer from './components/Footer';
 import './App.css';
 
+import timer from './utilities/timer';
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: 'AIzaSyCkDUn5Z6gvSm-r9yb4UbKNBMxfAlOyUrk',
@@ -35,30 +37,6 @@ const firebaseApp = initializeApp(firebaseConfig);
 
 const storage = getStorage();
 const db = getFirestore(firebaseApp);
-
-const timer = (() => {
-  let startTime;
-  let endTime;
-
-  const start = () => {
-    startTime = Date.now();
-    endTime = undefined;
-  };
-
-  const stop = () => {
-    endTime = Date.now();
-  };
-
-  const getTotalTime = () => {
-    return `${(endTime - startTime) / 1000} seconds`;
-  };
-
-  return {
-    start,
-    stop,
-    getTotalTime,
-  };
-})();
 
 function App() {
   const [pictures, setPictures] = useState([]);
