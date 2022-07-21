@@ -1,7 +1,5 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from 'firebase/app';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+//* Importing Firebase (configured app and various functions)
+import firebaseApp from './utilities/firebaseApp';
 import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
 import {
   getFirestore,
@@ -11,9 +9,11 @@ import {
   getDoc,
 } from 'firebase/firestore';
 
+//* Importing React, various hooks and routing functions
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
+//* Importing components and styles
 import Header from './components/Header';
 import Game from './components/Game';
 import NewGame from './components/NewGame';
@@ -21,19 +21,8 @@ import HighScores from './components/HighScores';
 import Footer from './components/Footer';
 import './App.css';
 
+//* Importing additional utilities
 import timer from './utilities/timer';
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: 'AIzaSyCkDUn5Z6gvSm-r9yb4UbKNBMxfAlOyUrk',
-  authDomain: 'whereswaldo-ea81f.firebaseapp.com',
-  projectId: 'whereswaldo-ea81f',
-  storageBucket: 'whereswaldo-ea81f.appspot.com',
-  messagingSenderId: '462284750954',
-  appId: '1:462284750954:web:256577b4667fcb2b190a13',
-};
-// Initialize Firebase
-const firebaseApp = initializeApp(firebaseConfig);
 
 const storage = getStorage();
 const db = getFirestore(firebaseApp);
