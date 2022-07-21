@@ -7,6 +7,7 @@ import {
   getDocs,
   doc,
   getDoc,
+  addDoc,
 } from 'firebase/firestore';
 
 //* Importing React, various hooks and routing functions
@@ -22,9 +23,11 @@ import Footer from './components/Footer';
 import './App.css';
 
 //* Importing additional utilities
+import uniqid from 'uniqid';
 import timer from './utilities/timer';
+import extractFileName from './utilities/extractFileName';
 
-const storage = getStorage();
+const storage = getStorage(firebaseApp);
 const db = getFirestore(firebaseApp);
 
 function App() {
@@ -39,6 +42,23 @@ function App() {
     timer.start();
   };
 
+  const addScore = (score) => {
+    // setScores((prev) => {
+    //   return [...prev, score];
+    // });
+
+    //TODO: take score and add it to the database
+    const scoresRef = collection(db, 'scores');
+    addDoc(scoresRef, score);
+    //TODO: update scores with response from database
+    getDocs(scoresRef).then((snapshot) => {
+      const scoresDocs = snapshot.docs.map((doc) => {
+        return { ...doc.data(), id: doc.id };
+      });
+      setScores(scoresDocs);
+    });
+  };
+
   const checkCoords = (record) => {
     const docRef = doc(db, 'locations', record.fileName);
     getDoc(docRef).then((snapshot) => {
@@ -50,9 +70,15 @@ function App() {
         data.y <= record.coordinates.y2
       ) {
         //TODO: do something if they are and do something else if they do not...
-        console.log('You found Waldo!');
         timer.stop();
+        console.log('You found Waldo!');
         console.log(`It took you: ${timer.getTotalTime()}`);
+        addScore({
+          id: uniqid(),
+          username: 'testuser1',
+          picture: extractFileName(gamePic),
+          score: timer.getTotalTime(),
+        });
       } else {
         console.log('Nope...');
       }

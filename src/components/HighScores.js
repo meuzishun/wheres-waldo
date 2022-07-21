@@ -11,6 +11,7 @@ function HighScores({ scores }) {
               <Score
                 key={score.id}
                 username={score.username}
+                picture={score.picture}
                 score={score.score}
               />
             ))

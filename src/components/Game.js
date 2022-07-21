@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import extractFileName from '../utilities/extractFileName';
 
 function Game({ gamePic, checkCoords }) {
   useEffect(() => {
@@ -23,8 +24,9 @@ function Game({ gamePic, checkCoords }) {
     };
 
     const createClickRecord = (e) => {
-      const brokenUrl = e.target.src.split('/');
-      const fileName = brokenUrl[brokenUrl.length - 1];
+      // const brokenUrl = e.target.src.split('/');
+      // const fileName = brokenUrl[brokenUrl.length - 1];
+      const fileName = extractFileName(e.target.src);
       const coordinates = getBoxCoords(e);
 
       return {
