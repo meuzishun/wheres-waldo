@@ -12,7 +12,7 @@ const timer = (() => {
   };
 
   const getTotalTime = () => {
-    return `${(endTime - startTime) / 1000} seconds`;
+    return endTime - startTime;
   };
 
   return {

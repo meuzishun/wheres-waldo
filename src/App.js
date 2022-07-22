@@ -8,6 +8,8 @@ import {
   doc,
   getDoc,
   addDoc,
+  query,
+  orderBy,
 } from 'firebase/firestore';
 
 //* Importing React, various hooks and routing functions
@@ -29,6 +31,7 @@ import extractFileName from './utilities/extractFileName';
 
 const storage = getStorage(firebaseApp);
 const db = getFirestore(firebaseApp);
+const scoresRef = collection(db, 'scores');
 
 function App() {
   const [pictures, setPictures] = useState([]);
@@ -42,21 +45,21 @@ function App() {
     timer.start();
   };
 
-  const addScore = (score) => {
-    // setScores((prev) => {
-    //   return [...prev, score];
-    // });
-
-    //TODO: take score and add it to the database
-    const scoresRef = collection(db, 'scores');
-    addDoc(scoresRef, score);
+  const getOrderedScores = () => {
     //TODO: update scores with response from database
-    getDocs(scoresRef).then((snapshot) => {
+    const orderedScores = query(scoresRef, orderBy('score'));
+    getDocs(orderedScores).then((snapshot) => {
       const scoresDocs = snapshot.docs.map((doc) => {
         return { ...doc.data(), id: doc.id };
       });
       setScores(scoresDocs);
     });
+  };
+
+  const addScore = (score) => {
+    //TODO: take score and add it to the database
+    addDoc(scoresRef, score);
+    getOrderedScores();
   };
 
   const checkCoords = (record) => {
@@ -95,16 +98,7 @@ function App() {
       './tempAssets/space.jpg',
       './tempAssets/worldwide.jpg',
     ]);
-  }, []);
-
-  useEffect(() => {
-    const scoresRef = collection(db, 'scores');
-    getDocs(scoresRef).then((snapshot) => {
-      const scoresDocs = snapshot.docs.map((doc) => {
-        return { ...doc.data(), id: doc.id };
-      });
-      setScores(scoresDocs);
-    });
+    getOrderedScores();
   }, []);
 
   //! SAVE THIS CODE
