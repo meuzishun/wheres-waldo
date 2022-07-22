@@ -14,7 +14,7 @@ import {
 
 //* Importing React, various hooks and routing functions
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 
 //* Importing components and styles
 import Header from './components/Header';
@@ -28,21 +28,46 @@ import './App.css';
 import uniqid from 'uniqid';
 import timer from './utilities/timer';
 import extractFileName from './utilities/extractFileName';
+import ResultSubmission from './components/ResultSubmission';
 
 const storage = getStorage(firebaseApp);
 const db = getFirestore(firebaseApp);
 const scoresRef = collection(db, 'scores');
 
 function App() {
+  //! not working
+  // const navigate = useNavigate();
   const [pictures, setPictures] = useState([]);
   const [gamePic, setGamePic] = useState(undefined);
   const [scores, setScores] = useState([]);
+  const [latestScore, setLatestScore] = useState(null);
+  const [showResult, setShowResult] = useState(false);
 
   const handlePicClick = (e) => {
     setGamePic(e.target.src);
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0;
     timer.start();
+  };
+
+  const handleScoreSubmission = (e) => {
+    e.preventDefault();
+    console.log(e.target.username.value);
+    addScore({
+      id: uniqid(),
+      username: e.target.username.value,
+      picture: extractFileName(gamePic),
+      score: latestScore,
+    });
+    setLatestScore(null);
+    setShowResult(false);
+    // navigate('/');
+  };
+
+  const cancelScoreSubmission = () => {
+    setLatestScore(null);
+    setShowResult(false);
+    // navigate('/');
   };
 
   const getOrderedScores = () => {
@@ -74,14 +99,10 @@ function App() {
       ) {
         //TODO: do something if they are and do something else if they do not...
         timer.stop();
-        console.log('You found Waldo!');
-        console.log(`It took you: ${timer.getTotalTime()}`);
-        addScore({
-          id: uniqid(),
-          username: 'testuser1',
-          picture: extractFileName(gamePic),
-          score: timer.getTotalTime(),
-        });
+        // console.log('You found Waldo!');
+        // console.log(`It took you: ${timer.getTotalTime()}`);
+        setLatestScore(timer.getTotalTime());
+        setShowResult(true);
       } else {
         console.log('Nope...');
       }
@@ -152,6 +173,13 @@ function App() {
           <Route path='/highscores' element={<HighScores scores={scores} />} />
         </Routes>
         <Footer />
+        {showResult ? (
+          <ResultSubmission
+            score={latestScore}
+            handleScoreSubmission={handleScoreSubmission}
+            cancelScoreSubmission={cancelScoreSubmission}
+          />
+        ) : null}
       </BrowserRouter>
       {console.log('App rendered')}
     </div>

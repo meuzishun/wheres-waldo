@@ -1,9 +1,10 @@
 import React from 'react';
+import formatTime from '../utilities/formatTime';
 
 function Score({ username, picture, score }) {
-  const formatTime = (ms) => {
-    return new Date(ms).toISOString().slice(11, -1);
-  };
+  // const formatTime = (ms) => {
+  //   return new Date(ms).toISOString().slice(11, -1);
+  // };
 
   const formatFileName = (filename) => {
     const name = filename.split('.')[0];
