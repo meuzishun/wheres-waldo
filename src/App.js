@@ -97,6 +97,16 @@ function App() {
     ]);
   }, []);
 
+  useEffect(() => {
+    const scoresRef = collection(db, 'scores');
+    getDocs(scoresRef).then((snapshot) => {
+      const scoresDocs = snapshot.docs.map((doc) => {
+        return { ...doc.data(), id: doc.id };
+      });
+      setScores(scoresDocs);
+    });
+  }, []);
+
   //! SAVE THIS CODE
   //!===========================================================================
   // useEffect(() => {
