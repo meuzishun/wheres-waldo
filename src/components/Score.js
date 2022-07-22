@@ -2,11 +2,11 @@ import React from 'react';
 
 function Score({ username, picture, score }) {
   return (
-    <div className='scoreContainer'>
-      <p className='userName'>{username}</p>
-      <p className='picture'>{picture}</p>
-      <p className='userScore'>{score}</p>
-    </div>
+    <tr className='scoreRow'>
+      <td className='userName'>{username}</td>
+      <td className='picture'>{picture}</td>
+      <td className='userScore'>{score}</td>
+    </tr>
   );
 }
 

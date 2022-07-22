@@ -59,7 +59,7 @@ header li a {
 .newGamePage > h1 {
   color: var(--primary-blue);
   text-transform: capitalize;
-  font-size: 1.5rem;
+  font-size: 2rem;
 }
 
 .newGamePage > .pictureContainer {
@@ -105,24 +105,44 @@ header li a {
 
 /* high scores styles */
 .highScoresPage {
-  padding: 4rem;
-  width: 100%;
-}
-
-.highScoresContainer {
-  padding: 2rem 4rem;
+  /* padding: 4rem; */
+  /* width: 100%; */
+  padding-top: 4rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  align-items: center;
 }
 
-.scoreContainer {
-  display: flex;
+.highScoresPage > h1 {
+  font-size: 2rem;
+  color: var(--primary-blue);
+}
+
+.highScoresTable {
+  padding: 2rem 4rem;
+  border-collapse: collapse;
+}
+
+.highScoresTable td {
+  border: 1px solid black;
+  padding: 0.5rem;
+}
+
+.highScoresTable > thead td {
+  border: 1px solid black;
+  font-size: 1.5rem;
+}
+
+.highScoresTable > tbody {
+}
+
+.scoreRow {
+  /* display: flex;
   justify-content: space-between;
-  gap: 4rem;
+  gap: 4rem; */
 }
 
-.scoreContainer > p {
+.scoreRow > td {
   font-size: 1.25rem;
 }
 
