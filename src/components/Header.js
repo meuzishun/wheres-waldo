@@ -17,7 +17,7 @@ function Header() {
           </li>
         </ul>
       </nav>
-      {console.log('Header rendered')}
+      {/* {console.log('Header rendered')} */}
     </header>
   );
 }

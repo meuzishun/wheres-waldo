@@ -2,7 +2,7 @@ import React from 'react';
 import Score from './Score';
 
 function HighScores({ scores }) {
-  console.log(scores);
+  // console.log(scores);
   return (
     <div className='highScoresPage'>
       <h1>High Scores</h1>
@@ -27,7 +27,7 @@ function HighScores({ scores }) {
             : null}
         </tbody>
       </table>
-      {console.log('HighScores rendered')}
+      {/* {console.log('HighScores rendered')} */}
     </div>
   );
 }

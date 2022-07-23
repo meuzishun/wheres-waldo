@@ -11,7 +11,7 @@ function NewGame({ pictures, handlePicClick }) {
           ? pictures.map((picSrc) => <Picture key={uniqid()} picSrc={picSrc} />)
           : null}
       </div>
-      {console.log('NewGame rendered')}
+      {/* {console.log('NewGame rendered')} */}
     </div>
   );
 }

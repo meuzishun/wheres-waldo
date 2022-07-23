@@ -80,7 +80,7 @@ function Game({ gamePic, checkAttempt }) {
       <span className='boxCursor hidden'></span>
       <span className='innerBox hidden'></span>
       <img className='gameImage' src={gamePic} alt='gamePic' />
-      {console.log('Game rendered')}
+      {/* {console.log('Game rendered')} */}
     </div>
   );
 }

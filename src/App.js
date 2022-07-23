@@ -178,7 +178,7 @@ function App() {
           cancelScoreSubmission={cancelScoreSubmission}
         />
       ) : null}
-      {console.log('App rendered')}
+      {/* {console.log('App rendered')} */}
     </div>
   );
 }
