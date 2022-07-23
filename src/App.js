@@ -36,7 +36,7 @@ const scoresRef = collection(db, 'scores');
 
 function App() {
   //! not working
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [pictures, setPictures] = useState([]);
   const [gamePic, setGamePic] = useState(undefined);
   const [scores, setScores] = useState([]);
@@ -61,17 +61,16 @@ function App() {
     });
     setLatestScore(null);
     setShowResult(false);
-    // navigate('/');
+    navigate('/highscores');
   };
 
   const cancelScoreSubmission = () => {
     setLatestScore(null);
     setShowResult(false);
-    // navigate('/');
+    navigate('/');
   };
 
   const getOrderedScores = () => {
-    //TODO: update scores with response from database
     const orderedScores = query(scoresRef, orderBy('score'));
     getDocs(orderedScores).then((snapshot) => {
       const scoresDocs = snapshot.docs.map((doc) => {
@@ -82,25 +81,25 @@ function App() {
   };
 
   const addScore = (score) => {
-    //TODO: take score and add it to the database
     addDoc(scoresRef, score);
     getOrderedScores();
   };
 
-  const checkCoords = (record) => {
+  const checkCoords = (data, record) => {
+    return (
+      data.x >= record.coordinates.x1 &&
+      data.x <= record.coordinates.x2 &&
+      data.y >= record.coordinates.y1 &&
+      data.y <= record.coordinates.y2
+    );
+  };
+
+  const checkAttempt = (record) => {
     const docRef = doc(db, 'locations', record.fileName);
     getDoc(docRef).then((snapshot) => {
       const data = snapshot.data();
-      if (
-        data.x >= record.coordinates.x1 &&
-        data.x <= record.coordinates.x2 &&
-        data.y >= record.coordinates.y1 &&
-        data.y <= record.coordinates.y2
-      ) {
-        //TODO: do something if they are and do something else if they do not...
+      if (checkCoords(data, record)) {
         timer.stop();
-        // console.log('You found Waldo!');
-        // console.log(`It took you: ${timer.getTotalTime()}`);
         setLatestScore(timer.getTotalTime());
         setShowResult(true);
       } else {
@@ -157,30 +156,28 @@ function App() {
 
   return (
     <div className='App'>
-      <BrowserRouter>
-        <Header />
-        <Routes>
-          <Route
-            path='/'
-            element={
-              <NewGame pictures={pictures} handlePicClick={handlePicClick} />
-            }
-          />
-          <Route
-            path='/game'
-            element={<Game gamePic={gamePic} checkCoords={checkCoords} />}
-          />
-          <Route path='/highscores' element={<HighScores scores={scores} />} />
-        </Routes>
-        <Footer />
-        {showResult ? (
-          <ResultSubmission
-            score={latestScore}
-            handleScoreSubmission={handleScoreSubmission}
-            cancelScoreSubmission={cancelScoreSubmission}
-          />
-        ) : null}
-      </BrowserRouter>
+      <Header />
+      <Routes>
+        <Route
+          path='/'
+          element={
+            <NewGame pictures={pictures} handlePicClick={handlePicClick} />
+          }
+        />
+        <Route
+          path='/game'
+          element={<Game gamePic={gamePic} checkAttempt={checkAttempt} />}
+        />
+        <Route path='/highscores' element={<HighScores scores={scores} />} />
+      </Routes>
+      <Footer />
+      {showResult ? (
+        <ResultSubmission
+          score={latestScore}
+          handleScoreSubmission={handleScoreSubmission}
+          cancelScoreSubmission={cancelScoreSubmission}
+        />
+      ) : null}
       {console.log('App rendered')}
     </div>
   );

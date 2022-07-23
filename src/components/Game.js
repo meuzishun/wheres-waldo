@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import extractFileName from '../utilities/extractFileName';
 
-function Game({ gamePic, checkCoords }) {
+function Game({ gamePic, checkAttempt }) {
   useEffect(() => {
     const boxCursor = document.querySelector('.boxCursor');
     const innerBox = document.querySelector('.innerBox');
@@ -46,7 +46,7 @@ function Game({ gamePic, checkCoords }) {
     const imgClickHandler = (e) => {
       // console.log(getImgCoords(e));
       const record = createClickRecord(e);
-      checkCoords(record);
+      checkAttempt(record);
       // console.log(record);
     };
 
