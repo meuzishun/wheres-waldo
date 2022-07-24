@@ -14,13 +14,14 @@ import {
 
 //* Importing React, various hooks and routing functions
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 
 //* Importing components and styles
 import Header from './components/Header';
+import NewGameMenu from './components/NewGameMenu';
 import Game from './components/Game';
-import NewGame from './components/NewGame';
 import HighScores from './components/HighScores';
+import ResultModal from './components/ResultModal';
 import Footer from './components/Footer';
 import './App.css';
 
@@ -28,61 +29,25 @@ import './App.css';
 import uniqid from 'uniqid';
 import timer from './utilities/timer';
 import extractFileName from './utilities/extractFileName';
-import ResultSubmission from './components/ResultSubmission';
 
-const storage = getStorage(firebaseApp);
+// const storage = getStorage(firebaseApp);
+// const waldoImages = ref(storage, 'waldo_images');
 const db = getFirestore(firebaseApp);
 const scoresRef = collection(db, 'scores');
 
 function App() {
-  //! not working
   const navigate = useNavigate();
-  const [pictures, setPictures] = useState([]);
-  const [gamePic, setGamePic] = useState(undefined);
+  const [menuImageUrls, setMenuImageUrls] = useState([]);
+  const [gameImageUrl, setGameImageUrl] = useState(undefined);
   const [scores, setScores] = useState([]);
-  const [latestScore, setLatestScore] = useState(null);
-  const [showResult, setShowResult] = useState(false);
+  const [latestTime, setLatestTime] = useState(null);
+  const [showResultModal, setShowResultModal] = useState(false);
 
-  const handlePicClick = (e) => {
-    setGamePic(e.target.src);
+  const handleImageChoice = (e) => {
+    setGameImageUrl(e.target.src);
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0;
     timer.start();
-  };
-
-  const handleScoreSubmission = (e) => {
-    e.preventDefault();
-    console.log(e.target.username.value);
-    addScore({
-      id: uniqid(),
-      username: e.target.username.value,
-      picture: extractFileName(gamePic),
-      score: latestScore,
-    });
-    setLatestScore(null);
-    setShowResult(false);
-    navigate('/highscores');
-  };
-
-  const cancelScoreSubmission = () => {
-    setLatestScore(null);
-    setShowResult(false);
-    navigate('/');
-  };
-
-  const getOrderedScores = () => {
-    const orderedScores = query(scoresRef, orderBy('score'));
-    getDocs(orderedScores).then((snapshot) => {
-      const scoresDocs = snapshot.docs.map((doc) => {
-        return { ...doc.data(), id: doc.id };
-      });
-      setScores(scoresDocs);
-    });
-  };
-
-  const addScore = (score) => {
-    addDoc(scoresRef, score);
-    getOrderedScores();
   };
 
   const checkCoords = (data, record) => {
@@ -100,17 +65,47 @@ function App() {
       const data = snapshot.data();
       if (checkCoords(data, record)) {
         timer.stop();
-        setLatestScore(timer.getTotalTime());
-        setShowResult(true);
+        setLatestTime(timer.getTotalTime());
+        setShowResultModal(true);
       } else {
         console.log('Nope...');
       }
     });
   };
 
-  //* This is temporarily for getting game pictures to not tap the database too much in development
+  const getOrderedScores = () => {
+    const orderedScores = query(scoresRef, orderBy('time'));
+    getDocs(orderedScores).then((snapshot) => {
+      const scoresDocs = snapshot.docs.map((doc) => {
+        return { ...doc.data(), id: doc.id };
+      });
+      setScores(scoresDocs);
+    });
+  };
+
+  const handleResultSubmission = (e) => {
+    e.preventDefault();
+    addDoc(scoresRef, {
+      id: uniqid(),
+      username: e.target.username.value,
+      picture: extractFileName(gameImageUrl),
+      time: latestTime,
+    });
+    setLatestTime(null);
+    setShowResultModal(false);
+    getOrderedScores();
+    navigate('/highscores');
+  };
+
+  const cancelResultSubmission = () => {
+    setLatestTime(null);
+    setShowResultModal(false);
+    navigate('/');
+  };
+
+  //* This is temporarily for getting game images to not tap the database too much in development
   useEffect(() => {
-    setPictures([
+    setMenuImageUrls([
       './tempAssets/beach.jpg',
       './tempAssets/gobbling.jpg',
       './tempAssets/racing.jpg',
@@ -124,13 +119,11 @@ function App() {
   //! SAVE THIS CODE
   //!===========================================================================
   // useEffect(() => {
-  //   const waldoPictures = ref(storage, 'waldo_images');
-
-  //   listAll(waldoPictures)
+  //   listAll(waldoImages)
   //     .then((res) => {
   //       res.items.forEach((item) => {
   //         getDownloadURL(ref(storage, item.fullPath)).then((url) => {
-  //           setPictures((prev) => {
+  //           setMenuImageUrls((prev) => {
   //             if (!prev.includes(url)) {
   //               return [...prev, url];
   //             }
@@ -161,21 +154,26 @@ function App() {
         <Route
           path='/'
           element={
-            <NewGame pictures={pictures} handlePicClick={handlePicClick} />
+            <NewGameMenu
+              menuImageUrls={menuImageUrls}
+              handleImageChoice={handleImageChoice}
+            />
           }
         />
         <Route
           path='/game'
-          element={<Game gamePic={gamePic} checkAttempt={checkAttempt} />}
+          element={
+            <Game gameImageUrl={gameImageUrl} checkAttempt={checkAttempt} />
+          }
         />
         <Route path='/highscores' element={<HighScores scores={scores} />} />
       </Routes>
       <Footer />
-      {showResult ? (
-        <ResultSubmission
-          score={latestScore}
-          handleScoreSubmission={handleScoreSubmission}
-          cancelScoreSubmission={cancelScoreSubmission}
+      {showResultModal ? (
+        <ResultModal
+          time={latestTime}
+          handleResultSubmission={handleResultSubmission}
+          cancelResultSubmission={cancelResultSubmission}
         />
       ) : null}
       {/* {console.log('App rendered')} */}

@@ -2,7 +2,6 @@ import React from 'react';
 import Score from './Score';
 
 function HighScores({ scores }) {
-  // console.log(scores);
   return (
     <div className='highScoresPage'>
       <h1>High Scores</h1>
@@ -11,7 +10,7 @@ function HighScores({ scores }) {
           <tr>
             <td>User Name</td>
             <td>Picture</td>
-            <td>Score</td>
+            <td>Time</td>
           </tr>
         </thead>
         <tbody>
@@ -21,7 +20,7 @@ function HighScores({ scores }) {
                   key={score.id}
                   username={score.username}
                   picture={score.picture}
-                  score={score.score}
+                  time={score.time}
                 />
               ))
             : null}

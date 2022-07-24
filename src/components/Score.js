@@ -1,7 +1,7 @@
 import React from 'react';
 import formatTime from '../utilities/formatTime';
 
-function Score({ username, picture, score }) {
+function Score({ username, picture, time }) {
   // const formatTime = (ms) => {
   //   return new Date(ms).toISOString().slice(11, -1);
   // };
@@ -15,7 +15,7 @@ function Score({ username, picture, score }) {
     <tr className='scoreRow'>
       <td className='userName'>{username}</td>
       <td className='picture'>{formatFileName(picture)}</td>
-      <td className='userScore'>{formatTime(score)}</td>
+      <td className='userScore'>{formatTime(time)}</td>
     </tr>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import extractFileName from '../utilities/extractFileName';
 
-function Game({ gamePic, checkAttempt }) {
+function Game({ gameImageUrl, checkAttempt }) {
   useEffect(() => {
     const boxCursor = document.querySelector('.boxCursor');
     const innerBox = document.querySelector('.innerBox');
@@ -24,8 +24,6 @@ function Game({ gamePic, checkAttempt }) {
     };
 
     const createClickRecord = (e) => {
-      // const brokenUrl = e.target.src.split('/');
-      // const fileName = brokenUrl[brokenUrl.length - 1];
       const fileName = extractFileName(e.target.src);
       const coordinates = getBoxCoords(e);
 
@@ -44,10 +42,8 @@ function Game({ gamePic, checkAttempt }) {
     };
 
     const imgClickHandler = (e) => {
-      // console.log(getImgCoords(e));
       const record = createClickRecord(e);
       checkAttempt(record);
-      // console.log(record);
     };
 
     const mouseEnterImageHandler = () => {
@@ -68,8 +64,8 @@ function Game({ gamePic, checkAttempt }) {
     image.addEventListener('mouseleave', mouseLeaveImageHandler);
 
     return () => {
-      image.addEventListener('mousemove', mouseMoveHandler);
-      image.addEventListener('click', imgClickHandler);
+      image.removeEventListener('mousemove', mouseMoveHandler);
+      image.removeEventListener('click', imgClickHandler);
       image.removeEventListener('mouseenter', mouseEnterImageHandler);
       image.removeEventListener('mouseleave', mouseLeaveImageHandler);
     };
@@ -79,7 +75,7 @@ function Game({ gamePic, checkAttempt }) {
     <div className='gamePicture '>
       <span className='boxCursor hidden'></span>
       <span className='innerBox hidden'></span>
-      <img className='gameImage' src={gamePic} alt='gamePic' />
+      <img className='gameImage' src={gameImageUrl} alt='gamePic' />
       {/* {console.log('Game rendered')} */}
     </div>
   );

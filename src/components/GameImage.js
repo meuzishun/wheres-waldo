@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function Picture({ picSrc }) {
+function GameImage({ imageUrl }) {
   return (
     <div>
       <Link to='/game'>
-        <img src={picSrc} alt='waldoPic' />
+        <img src={imageUrl} alt='waldoPic' />
       </Link>
     </div>
   );
 }
 
-export default Picture;
+export default GameImage;
