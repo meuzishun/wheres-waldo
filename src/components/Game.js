@@ -1,23 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import extractFileName from '../utilities/extractFileName';
 import CharacterPicker from './CharacterPicker';
 
-function Game({
-  gameImageUrl,
-  gameCharacters,
-  checkAttempt,
-  checkCharacterCoords,
-}) {
+function Game({ gameImageUrl, gameCharacters, checkCharacterCoords }) {
   const [showCharacterPicker, setShowCharacterPicker] = useState(false);
   const [characterPickerLocation, setCharacterPickerLocation] = useState(null);
   const [boxCoords, setBoxCoords] = useState(null);
-
-  const getImgCoords = (e) => {
-    return {
-      x: e.offsetX / e.target.width,
-      y: e.offsetY / e.target.height,
-    };
-  };
 
   const getPagePosition = (e) => {
     return {
@@ -44,11 +31,11 @@ function Game({
 
   const escapePicker = (e) => {
     //TODO: another place to use ref
-    const boxCursor = document.querySelector('.boxCursor');
-    const innerBox = document.querySelector('.innerBox');
     if (e.keyCode === 27) {
       setShowCharacterPicker(false);
       setCharacterPickerLocation(null);
+      const boxCursor = document.querySelector('.boxCursor');
+      const innerBox = document.querySelector('.innerBox');
       boxCursor.classList.add('hidden');
       innerBox.classList.add('hidden');
     }

@@ -68,28 +68,6 @@ function App() {
       data.y <= boxCoords.y2
     );
   };
-  // const checkCoords = (data, record) => {
-  //   return (
-  //     data.x >= record.coordinates.x1 &&
-  //     data.x <= record.coordinates.x2 &&
-  //     data.y >= record.coordinates.y1 &&
-  //     data.y <= record.coordinates.y2
-  //   );
-  // };
-
-  const checkAttempt = (record) => {
-    const docRef = doc(db, 'locations', record.fileName);
-    getDoc(docRef).then((snapshot) => {
-      const data = snapshot.data();
-      if (checkCoords(data, record)) {
-        timer.stop();
-        setLatestTime(timer.getTotalTime());
-        setShowResultModal(true);
-      } else {
-        console.log('Nope...');
-      }
-    });
-  };
 
   const checkCharacterCoords = (character, boxCoords) => {
     const docRef = doc(db, 'locations', extractFileName(gameImageUrl));
@@ -212,7 +190,6 @@ function App() {
             <Game
               gameImageUrl={gameImageUrl}
               gameCharacters={gameCharacters}
-              checkAttempt={checkAttempt}
               checkCharacterCoords={checkCharacterCoords}
             />
           }
