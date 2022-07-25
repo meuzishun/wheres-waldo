@@ -140,15 +140,6 @@ header li a {
   font-size: 1.5rem;
 }
 
-.highScoresTable > tbody {
-}
-
-.scoreRow {
-  /* display: flex;
-  justify-content: space-between;
-  gap: 4rem; */
-}
-
 .scoreRow:nth-child(odd) {
   background-color: rgb(225, 225, 225);
 }
@@ -181,6 +172,7 @@ footer {
 .characterPicker > p {
   padding: 0.5rem 1rem;
   font-size: 1.25rem;
+  text-transform: capitalize;
 }
 
 .characterPicker > p:hover {
