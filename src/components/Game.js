@@ -36,8 +36,8 @@ function Game({ gameImageUrl, gameCharacters, checkCharacterCoords }) {
       setCharacterPickerLocation(null);
       const boxCursor = document.querySelector('.boxCursor');
       const innerBox = document.querySelector('.innerBox');
-      boxCursor.classList.add('hidden');
-      innerBox.classList.add('hidden');
+      boxCursor.classList.remove('hidden');
+      innerBox.classList.remove('hidden');
     }
   };
 
@@ -58,6 +58,8 @@ function Game({ gameImageUrl, gameCharacters, checkCharacterCoords }) {
       setBoxCoords(getBoxCoords(e));
       setCharacterPickerLocation(getPagePosition(e));
       setShowCharacterPicker(true);
+      boxCursor.classList.add('hidden');
+      innerBox.classList.add('hidden');
     };
 
     const mouseEnterImageHandler = () => {
@@ -86,7 +88,7 @@ function Game({ gameImageUrl, gameCharacters, checkCharacterCoords }) {
   }, []);
 
   return (
-    <div className='gamePicture '>
+    <div className='gamePicture'>
       <span className='boxCursor hidden'></span>
       <span className='innerBox hidden'></span>
       <img className='gameImage' src={gameImageUrl} alt='gamePic' />

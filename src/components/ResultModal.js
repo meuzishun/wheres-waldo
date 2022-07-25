@@ -17,8 +17,14 @@ function ResultModal({ time, handleResultSubmission, cancelResultSubmission }) {
           <label htmlFor='username'>Name:</label>
           <input className='usernameInput' type='text' name='username' />
           <div className='btnContainer'>
-            <button type='submit'>submit score</button>
-            <button type='button' onClick={cancelResultSubmission}>
+            <button className='submitBtn' type='submit'>
+              submit score
+            </button>
+            <button
+              className='cancelBtn'
+              type='button'
+              onClick={cancelResultSubmission}
+            >
               cancel
             </button>
           </div>

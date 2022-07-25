@@ -44,6 +44,17 @@ header li a {
   border-radius: 0.4rem;
   text-decoration: none;
   color: #fff;
+  transition: all 200ms ease-in-out;
+}
+
+header li a:hover {
+  transform: scale(1.025);
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+}
+
+header li a:active {
+  transform: scale(1);
+  box-shadow: none;
 }
 
 /* new game styles */
@@ -72,11 +83,21 @@ header li a {
 .pictureContainer img {
   border-radius: 1rem;
   width: 100%;
+  transition: all 200ms ease-in-out;
+}
+
+.pictureContainer img:hover {
+  border-radius: 1rem;
+  width: 100%;
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
+  transform: scale(1.025);
 }
 
 /* game styles */
 .gamePicture > img {
   width: 100%;
+  height: 100%;
+  object-fit: contain contain;
   display: block;
 }
 
@@ -91,12 +112,13 @@ header li a {
   border-radius: 10%;
   border: 4px solid var(--primary-red);
   pointer-events: none;
-  box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 .innerBox {
   border-style: dashed;
   border-color: var(--primary-blue);
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .hidden {
@@ -167,6 +189,7 @@ footer {
   top: 0;
   background-color: #fff;
   border-radius: 0.2rem;
+  box-shadow: 4px 4px 10px black;
 }
 
 .characterPicker > p {
@@ -225,6 +248,24 @@ footer {
 }
 
 .modal .btnContainer > button {
-  padding: 0.25rem 0.5rem;
+  padding: 0.5rem 1rem;
   border-radius: 1000px;
+  border: none;
+  text-transform: capitalize;
+  transition: all 200ms ease-in-out;
+}
+
+.modal .btnContainer > button:hover {
+  transform: scale(1.025);
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+}
+
+.modal .btnContainer > button:active {
+  transform: scale(1);
+  box-shadow: none;
+}
+
+.modal .btnContainer > .submitBtn {
+  background-color: rgb(61, 152, 61);
+  color: #fff;
 }
