@@ -39,25 +39,44 @@ function App() {
   const navigate = useNavigate();
   const [menuImageUrls, setMenuImageUrls] = useState([]);
   const [gameImageUrl, setGameImageUrl] = useState(undefined);
+  const [gameOver, setGameOver] = useState(false);
+  const [gameCharacters, setGameCharacters] = useState([]);
+  const [foundCharacters, setFoundCharacters] = useState([]);
+  const [showResultModal, setShowResultModal] = useState(false);
   const [scores, setScores] = useState([]);
   const [latestTime, setLatestTime] = useState(null);
-  const [showResultModal, setShowResultModal] = useState(false);
 
   const handleImageChoice = (e) => {
-    setGameImageUrl(e.target.src);
+    const gameImageUrl = e.target.src;
+    setGameImageUrl(gameImageUrl);
+    const gameImageName = extractFileName(gameImageUrl);
+    const docRef = doc(db, 'locations', gameImageName);
+    getDoc(docRef).then((snapshot) => {
+      const data = snapshot.data();
+      const characters = Object.keys(data);
+      setGameCharacters(characters);
+    });
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0;
     timer.start();
   };
 
-  const checkCoords = (data, record) => {
+  const checkCoords = (data, boxCoords) => {
     return (
-      data.x >= record.coordinates.x1 &&
-      data.x <= record.coordinates.x2 &&
-      data.y >= record.coordinates.y1 &&
-      data.y <= record.coordinates.y2
+      data.x >= boxCoords.x1 &&
+      data.x <= boxCoords.x2 &&
+      data.y >= boxCoords.y1 &&
+      data.y <= boxCoords.y2
     );
   };
+  // const checkCoords = (data, record) => {
+  //   return (
+  //     data.x >= record.coordinates.x1 &&
+  //     data.x <= record.coordinates.x2 &&
+  //     data.y >= record.coordinates.y1 &&
+  //     data.y <= record.coordinates.y2
+  //   );
+  // };
 
   const checkAttempt = (record) => {
     const docRef = doc(db, 'locations', record.fileName);
@@ -71,6 +90,31 @@ function App() {
         console.log('Nope...');
       }
     });
+  };
+
+  const checkCharacterCoords = (character, boxCoords) => {
+    const docRef = doc(db, 'locations', extractFileName(gameImageUrl));
+    getDoc(docRef).then((snapshot) => {
+      const data = snapshot.data();
+      if (checkCoords(data[character], boxCoords)) {
+        setFoundCharacters((prev) => [...prev, character]);
+      } else {
+        console.log('Nope...');
+      }
+    });
+  };
+
+  const checkAllCharactersFound = () => {
+    if (gameCharacters.length === 0) return;
+    if (
+      gameCharacters.every((character) => foundCharacters.includes(character))
+    ) {
+      setGameOver(true);
+      timer.stop();
+      setLatestTime(timer.getTotalTime());
+      setFoundCharacters([]);
+      setShowResultModal(true);
+    }
   };
 
   const getOrderedScores = () => {
@@ -115,6 +159,10 @@ function App() {
     ]);
     getOrderedScores();
   }, []);
+
+  useEffect(() => {
+    checkAllCharactersFound();
+  }, [foundCharacters]);
 
   //! SAVE THIS CODE
   //!===========================================================================
@@ -163,7 +211,13 @@ function App() {
         <Route
           path='/game'
           element={
-            <Game gameImageUrl={gameImageUrl} checkAttempt={checkAttempt} />
+            <Game
+              gameImageUrl={gameImageUrl}
+              gameCharacters={gameCharacters}
+              checkAttempt={checkAttempt}
+              checkCharacterCoords={checkCharacterCoords}
+              checkAllCharactersFound={checkAllCharactersFound}
+            />
           }
         />
         <Route path='/highscores' element={<HighScores scores={scores} />} />

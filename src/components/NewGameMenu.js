@@ -4,12 +4,16 @@ import uniqid from 'uniqid';
 
 function NewGameMenu({ menuImageUrls, handleImageChoice }) {
   return (
-    <div className='newGamePage' onClick={handleImageChoice}>
+    <div className='newGamePage'>
       <h1>choose a picture</h1>
       <div className='pictureContainer'>
         {menuImageUrls
           ? menuImageUrls.map((imageUrl) => (
-              <GameImage key={uniqid()} imageUrl={imageUrl} />
+              <GameImage
+                key={uniqid()}
+                imageUrl={imageUrl}
+                handleImageChoice={handleImageChoice}
+              />
             ))
           : null}
       </div>

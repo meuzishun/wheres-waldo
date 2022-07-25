@@ -1,37 +1,64 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import extractFileName from '../utilities/extractFileName';
+import CharacterPicker from './CharacterPicker';
 
-function Game({ gameImageUrl, checkAttempt }) {
+function Game({
+  gameImageUrl,
+  gameCharacters,
+  checkAttempt,
+  checkCharacterCoords,
+  checkAllCharactersFound,
+}) {
+  const [showCharacterPicker, setShowCharacterPicker] = useState(false);
+  const [characterPickerLocation, setCharacterPickerLocation] = useState(null);
+  const [boxCoords, setBoxCoords] = useState(null);
+  const [character, setCharacter] = useState(null);
+
+  const getImgCoords = (e) => {
+    return {
+      x: e.offsetX / e.target.width,
+      y: e.offsetY / e.target.height,
+    };
+  };
+
+  const getPagePosition = (e) => {
+    return {
+      x: e.offsetX,
+      y: e.offsetY,
+    };
+  };
+
+  const getBoxCoords = (e) => {
+    return {
+      x1: (e.offsetX - 40) / e.target.width,
+      y1: (e.offsetY - 40) / e.target.height,
+      x2: (e.offsetX + 40) / e.target.width,
+      y2: (e.offsetY + 40) / e.target.height,
+    };
+  };
+
+  const createClickRecord = (e) => {
+    // const fileName = extractFileName(e.target.src);
+    const coordinates = getBoxCoords(e);
+
+    return {
+      // fileName,
+      coordinates,
+    };
+  };
+
+  const handleCharacterClick = (e) => {
+    const character = e.target.dataset.character;
+    checkCharacterCoords(character, boxCoords);
+    // setTimeout(checkAllCharactersFound, 500);
+    setShowCharacterPicker(false);
+    setCharacterPickerLocation(null);
+  };
+
   useEffect(() => {
     const boxCursor = document.querySelector('.boxCursor');
     const innerBox = document.querySelector('.innerBox');
     const image = document.querySelector('.gameImage');
-
-    const getImgCoords = (e) => {
-      return {
-        x: e.offsetX / e.target.width,
-        y: e.offsetY / e.target.height,
-      };
-    };
-
-    const getBoxCoords = (e) => {
-      return {
-        x1: (e.offsetX - 40) / e.target.width,
-        y1: (e.offsetY - 40) / e.target.height,
-        x2: (e.offsetX + 40) / e.target.width,
-        y2: (e.offsetY + 40) / e.target.height,
-      };
-    };
-
-    const createClickRecord = (e) => {
-      const fileName = extractFileName(e.target.src);
-      const coordinates = getBoxCoords(e);
-
-      return {
-        fileName,
-        coordinates,
-      };
-    };
 
     const mouseMoveHandler = (e) => {
       boxCursor.style.left = e.clientX - boxCursor.offsetWidth / 2 + 'px';
@@ -42,8 +69,15 @@ function Game({ gameImageUrl, checkAttempt }) {
     };
 
     const imgClickHandler = (e) => {
-      const record = createClickRecord(e);
-      checkAttempt(record);
+      setBoxCoords(getBoxCoords(e));
+      setCharacterPickerLocation(getPagePosition(e));
+      setShowCharacterPicker(true);
+      console.group('imageClick');
+      console.log('Clicked at:');
+      console.log(getImgCoords(e));
+      console.groupEnd('imageClick');
+      // const record = createClickRecord(e);
+      // checkAttempt(record);
     };
 
     const mouseEnterImageHandler = () => {
@@ -76,6 +110,13 @@ function Game({ gameImageUrl, checkAttempt }) {
       <span className='boxCursor hidden'></span>
       <span className='innerBox hidden'></span>
       <img className='gameImage' src={gameImageUrl} alt='gamePic' />
+      {showCharacterPicker ? (
+        <CharacterPicker
+          gameCharacters={gameCharacters}
+          location={characterPickerLocation}
+          handleCharacterClick={handleCharacterClick}
+        />
+      ) : null}
       {/* {console.log('Game rendered')} */}
     </div>
   );

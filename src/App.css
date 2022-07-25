@@ -168,6 +168,26 @@ footer {
   font-size: 1.2rem;
 }
 
+.characterPicker {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: #fff;
+  border-radius: 0.2rem;
+}
+
+.characterPicker > p {
+  padding: 0.5rem 1rem;
+  font-size: 1.25rem;
+}
+
+.characterPicker > p:hover {
+  background-color: var(--primary-blue);
+  color: #fff;
+}
+
 .overlay {
   background-color: rgba(0, 0, 0, 0.75);
   width: 100%;
