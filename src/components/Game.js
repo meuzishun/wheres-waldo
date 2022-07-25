@@ -7,12 +7,10 @@ function Game({
   gameCharacters,
   checkAttempt,
   checkCharacterCoords,
-  checkAllCharactersFound,
 }) {
   const [showCharacterPicker, setShowCharacterPicker] = useState(false);
   const [characterPickerLocation, setCharacterPickerLocation] = useState(null);
   const [boxCoords, setBoxCoords] = useState(null);
-  const [character, setCharacter] = useState(null);
 
   const getImgCoords = (e) => {
     return {
@@ -37,22 +35,23 @@ function Game({
     };
   };
 
-  const createClickRecord = (e) => {
-    // const fileName = extractFileName(e.target.src);
-    const coordinates = getBoxCoords(e);
-
-    return {
-      // fileName,
-      coordinates,
-    };
-  };
-
   const handleCharacterClick = (e) => {
     const character = e.target.dataset.character;
     checkCharacterCoords(character, boxCoords);
-    // setTimeout(checkAllCharactersFound, 500);
     setShowCharacterPicker(false);
     setCharacterPickerLocation(null);
+  };
+
+  const escapePicker = (e) => {
+    //TODO: another place to use ref
+    const boxCursor = document.querySelector('.boxCursor');
+    const innerBox = document.querySelector('.innerBox');
+    if (e.keyCode === 27) {
+      setShowCharacterPicker(false);
+      setCharacterPickerLocation(null);
+      boxCursor.classList.add('hidden');
+      innerBox.classList.add('hidden');
+    }
   };
 
   useEffect(() => {
@@ -72,12 +71,6 @@ function Game({
       setBoxCoords(getBoxCoords(e));
       setCharacterPickerLocation(getPagePosition(e));
       setShowCharacterPicker(true);
-      console.group('imageClick');
-      console.log('Clicked at:');
-      console.log(getImgCoords(e));
-      console.groupEnd('imageClick');
-      // const record = createClickRecord(e);
-      // checkAttempt(record);
     };
 
     const mouseEnterImageHandler = () => {
@@ -115,6 +108,7 @@ function Game({
           gameCharacters={gameCharacters}
           location={characterPickerLocation}
           handleCharacterClick={handleCharacterClick}
+          escapePicker={escapePicker}
         />
       ) : null}
       {/* {console.log('Game rendered')} */}

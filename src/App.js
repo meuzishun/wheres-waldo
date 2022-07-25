@@ -39,7 +39,6 @@ function App() {
   const navigate = useNavigate();
   const [menuImageUrls, setMenuImageUrls] = useState([]);
   const [gameImageUrl, setGameImageUrl] = useState(undefined);
-  const [gameOver, setGameOver] = useState(false);
   const [gameCharacters, setGameCharacters] = useState([]);
   const [foundCharacters, setFoundCharacters] = useState([]);
   const [showResultModal, setShowResultModal] = useState(false);
@@ -109,7 +108,6 @@ function App() {
     if (
       gameCharacters.every((character) => foundCharacters.includes(character))
     ) {
-      setGameOver(true);
       timer.stop();
       setLatestTime(timer.getTotalTime());
       setFoundCharacters([]);
@@ -216,7 +214,6 @@ function App() {
               gameCharacters={gameCharacters}
               checkAttempt={checkAttempt}
               checkCharacterCoords={checkCharacterCoords}
-              checkAllCharactersFound={checkAllCharactersFound}
             />
           }
         />

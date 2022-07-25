@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-function CharacterPicker({ location, gameCharacters, handleCharacterClick }) {
+function CharacterPicker({
+  location,
+  gameCharacters,
+  handleCharacterClick,
+  escapePicker,
+}) {
   const pickerStyle = { left: location.x, top: location.y };
+  useEffect(() => {
+    document.addEventListener('keydown', escapePicker);
+    return () => {
+      document.removeEventListener('keydown', escapePicker);
+    };
+  }, []);
   return (
     <div className='characterPicker' style={pickerStyle}>
-      {/* <p data-character='waldo' onClick={handleCharacterClick}>
-        Waldo
-      </p>
-      <p data-character='odlaw' onClick={handleCharacterClick}>
-        Odlaw
-      </p>
-      <p data-character='wizard' onClick={handleCharacterClick}>
-        Wizard
-      </p> */}
       {gameCharacters
         ? gameCharacters.map((character) => (
             <p
