@@ -12,10 +12,13 @@
 
 /* header styles */
 header {
+  position: sticky;
+  top: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 1rem 2rem;
+  background-color: #fff;
 }
 
 header > h2,
@@ -36,6 +39,22 @@ header h2,
 
 #waldo {
   color: var(--primary-red);
+}
+
+header > .characterList {
+  justify-self: start;
+  display: flex;
+  gap: 1rem;
+}
+
+header > .characterList > p {
+  text-transform: capitalize;
+  font-size: 1.25rem;
+  color: var(--primary-red);
+}
+
+header > .characterList > .characterName {
+  color: var(--primary-blue);
 }
 
 header li a {
@@ -97,7 +116,8 @@ header li a:active {
 .gamePicture > img {
   width: 100%;
   height: 100%;
-  object-fit: contain contain;
+  overflow-x: scroll;
+  object-fit: cover;
   display: block;
 }
 

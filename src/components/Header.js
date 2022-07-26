@@ -1,12 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import CharacterList from './CharacterList';
 
-function Header() {
+function Header({ gameCharacters, foundCharacters }) {
   return (
     <header>
       <h2>
         where's <span id='waldo'>waldo</span>
       </h2>
+      <CharacterList
+        gameCharacters={gameCharacters}
+        foundCharacters={foundCharacters}
+      />
       <nav>
         <ul>
           <li>

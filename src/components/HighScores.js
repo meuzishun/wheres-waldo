@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Score from './Score';
 
 function HighScores({ scores }) {
+  useEffect(() => {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0;
+  }, []);
   return (
     <div className='highScoresPage'>
       <h1>High Scores</h1>

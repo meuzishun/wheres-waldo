@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 function CharacterPicker({
   location,
   gameCharacters,
+  foundCharacters,
   handleCharacterClick,
   escapePicker,
 }) {
@@ -16,15 +17,19 @@ function CharacterPicker({
   return (
     <div className='characterPicker' style={pickerStyle}>
       {gameCharacters
-        ? gameCharacters.map((character) => (
-            <p
-              key={character}
-              data-character={character}
-              onClick={handleCharacterClick}
-            >
-              {character}
-            </p>
-          ))
+        ? gameCharacters
+            .filter((character) => {
+              return !foundCharacters.includes(character);
+            })
+            .map((character) => (
+              <p
+                key={character}
+                data-character={character}
+                onClick={handleCharacterClick}
+              >
+                {character}
+              </p>
+            ))
         : null}
     </div>
   );

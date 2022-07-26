@@ -11,7 +11,7 @@ function ResultModal({ time, handleResultSubmission, cancelResultSubmission }) {
   return (
     <div className='overlay'>
       <div className='modal'>
-        <p>You found Waldo in {formatTime(time)}!</p>
+        <p>You finished in {formatTime(time)}!</p>
         <p>Would you like to submit your score?</p>
         <form onSubmit={handleResultSubmission}>
           <label htmlFor='username'>Name:</label>

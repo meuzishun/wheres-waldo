@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import CharacterPicker from './CharacterPicker';
 
-function Game({ gameImageUrl, gameCharacters, checkCharacterCoords }) {
+function Game({
+  gameImageUrl,
+  gameCharacters,
+  foundCharacters,
+  checkCharacterCoords,
+}) {
   const [showCharacterPicker, setShowCharacterPicker] = useState(false);
   const [characterPickerLocation, setCharacterPickerLocation] = useState(null);
   const [boxCoords, setBoxCoords] = useState(null);
@@ -95,6 +100,7 @@ function Game({ gameImageUrl, gameCharacters, checkCharacterCoords }) {
       {showCharacterPicker ? (
         <CharacterPicker
           gameCharacters={gameCharacters}
+          foundCharacters={foundCharacters}
           location={characterPickerLocation}
           handleCharacterClick={handleCharacterClick}
           escapePicker={escapePicker}

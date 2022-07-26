@@ -45,6 +45,10 @@ function App() {
   const [scores, setScores] = useState([]);
   const [latestTime, setLatestTime] = useState(null);
 
+  const clearGameCharacterList = () => {
+    setGameCharacters([]);
+  };
+
   const handleImageChoice = (e) => {
     const gameImageUrl = e.target.src;
     setGameImageUrl(gameImageUrl);
@@ -73,7 +77,10 @@ function App() {
     const docRef = doc(db, 'locations', extractFileName(gameImageUrl));
     getDoc(docRef).then((snapshot) => {
       const data = snapshot.data();
-      if (checkCoords(data[character], boxCoords)) {
+      if (
+        checkCoords(data[character], boxCoords) &&
+        !foundCharacters.includes(character)
+      ) {
         setFoundCharacters((prev) => [...prev, character]);
       } else {
         console.log('Nope...');
@@ -89,6 +96,7 @@ function App() {
       timer.stop();
       setLatestTime(timer.getTotalTime());
       setFoundCharacters([]);
+      setGameCharacters([]);
       setShowResultModal(true);
     }
   };
@@ -173,7 +181,10 @@ function App() {
 
   return (
     <div className='App'>
-      <Header />
+      <Header
+        gameCharacters={gameCharacters}
+        foundCharacters={foundCharacters}
+      />
       <Routes>
         <Route
           path='/'
@@ -181,6 +192,7 @@ function App() {
             <NewGameMenu
               menuImageUrls={menuImageUrls}
               handleImageChoice={handleImageChoice}
+              clearGameCharacterList={clearGameCharacterList}
             />
           }
         />
@@ -190,6 +202,7 @@ function App() {
             <Game
               gameImageUrl={gameImageUrl}
               gameCharacters={gameCharacters}
+              foundCharacters={foundCharacters}
               checkCharacterCoords={checkCharacterCoords}
             />
           }
