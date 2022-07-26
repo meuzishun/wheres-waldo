@@ -1,15 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import GameImage from './GameImage';
 import uniqid from 'uniqid';
 
-function NewGameMenu({
-  menuImageUrls,
-  handleImageChoice,
-  clearGameCharacterList,
-}) {
-  // useEffect(() => {
-  //   clearGameCharacterList();
-  // }, []);
+function NewGameMenu({ menuImageUrls, handleImageChoice }) {
   return (
     <div className='newGamePage'>
       <h1>choose a picture</h1>
