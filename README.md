@@ -1,4 +1,16 @@
-# Getting Started with Create React App
+# React Where's Waldo Game
+
+This project was created as part of the curriculum of [The Odin Project](https://www.theodinproject.com/).
+
+## Technologies Used
+
+• React
+• React-router-dom
+• Firestore
+• Firebase Storage
+• Firebase Hosting
+
+---
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
