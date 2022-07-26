@@ -7,9 +7,9 @@ function NewGameMenu({
   handleImageChoice,
   clearGameCharacterList,
 }) {
-  useEffect(() => {
-    clearGameCharacterList();
-  }, []);
+  // useEffect(() => {
+  //   clearGameCharacterList();
+  // }, []);
   return (
     <div className='newGamePage'>
       <h1>choose a picture</h1>

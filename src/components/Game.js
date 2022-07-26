@@ -6,6 +6,7 @@ function Game({
   gameCharacters,
   foundCharacters,
   checkCharacterCoords,
+  clearGameCharacterList,
 }) {
   const [showCharacterPicker, setShowCharacterPicker] = useState(false);
   const [characterPickerLocation, setCharacterPickerLocation] = useState(null);
@@ -89,6 +90,7 @@ function Game({
       image.removeEventListener('click', imgClickHandler);
       image.removeEventListener('mouseenter', mouseEnterImageHandler);
       image.removeEventListener('mouseleave', mouseLeaveImageHandler);
+      clearGameCharacterList();
     };
   }, []);
 

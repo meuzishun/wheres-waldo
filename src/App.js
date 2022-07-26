@@ -204,6 +204,7 @@ function App() {
               gameCharacters={gameCharacters}
               foundCharacters={foundCharacters}
               checkCharacterCoords={checkCharacterCoords}
+              clearGameCharacterList={clearGameCharacterList}
             />
           }
         />
