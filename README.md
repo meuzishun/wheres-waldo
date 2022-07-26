@@ -1,6 +1,6 @@
 # React Where's Waldo Game
 
-This project was created as part of the curriculum of [The Odin Project](https://www.theodinproject.com/).
+This project was created as part of the curriculum of [The Odin Project](https://www.theodinproject.com/) and is hosted live via [this link](https://whereswaldo-ea81f.web.app/).
 
 ## Technologies Used
 
