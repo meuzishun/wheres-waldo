@@ -1,11 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function GameImage({ imageUrl, handleImageChoice }) {
+function GameImage({ imagePackage, handleImageChoice }) {
   return (
     <div>
       <Link to='/game'>
-        <img src={imageUrl} alt='waldoPic' onClick={handleImageChoice} />
+        <img
+          src={imagePackage.url}
+          data-imagetitle={imagePackage.title}
+          data-imagefilename={imagePackage.filename}
+          alt='waldoPic'
+          onClick={handleImageChoice}
+        />
       </Link>
     </div>
   );

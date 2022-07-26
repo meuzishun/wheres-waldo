@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CharacterPicker from './CharacterPicker';
 
 function Game({
-  gameImageUrl,
+  gameImagePackage,
   gameCharacters,
   foundCharacters,
   checkCharacterCoords,
@@ -98,7 +98,12 @@ function Game({
     <div className='gamePicture'>
       <span className='boxCursor hidden'></span>
       <span className='innerBox hidden'></span>
-      <img className='gameImage' src={gameImageUrl} alt='gamePic' />
+      <img
+        className='gameImage'
+        data-title={gameImagePackage.title}
+        src={gameImagePackage.url}
+        alt='gamePic'
+      />
       {showCharacterPicker ? (
         <CharacterPicker
           gameCharacters={gameCharacters}

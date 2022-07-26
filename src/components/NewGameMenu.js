@@ -2,16 +2,16 @@ import React from 'react';
 import GameImage from './GameImage';
 import uniqid from 'uniqid';
 
-function NewGameMenu({ menuImageUrls, handleImageChoice }) {
+function NewGameMenu({ menuImagePackages, handleImageChoice }) {
   return (
     <div className='newGamePage'>
       <h1>choose a picture</h1>
       <div className='pictureContainer'>
-        {menuImageUrls
-          ? menuImageUrls.map((imageUrl) => (
+        {menuImagePackages
+          ? menuImagePackages.map((imagePackage) => (
               <GameImage
                 key={uniqid()}
-                imageUrl={imageUrl}
+                imagePackage={imagePackage}
                 handleImageChoice={handleImageChoice}
               />
             ))

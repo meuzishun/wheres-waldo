@@ -28,17 +28,16 @@ import './App.css';
 //* Importing additional utilities
 import uniqid from 'uniqid';
 import timer from './utilities/timer';
-import extractFileName from './utilities/extractFileName';
 
-// const storage = getStorage(firebaseApp);
-// const waldoImages = ref(storage, 'waldo_images');
+const storage = getStorage(firebaseApp);
+const waldoImages = ref(storage, 'waldo_images');
 const db = getFirestore(firebaseApp);
 const scoresRef = collection(db, 'scores');
 
 function App() {
   const navigate = useNavigate();
-  const [menuImageUrls, setMenuImageUrls] = useState([]);
-  const [gameImageUrl, setGameImageUrl] = useState(undefined);
+  const [menuImagePackages, setMenuImagePackages] = useState([]);
+  const [gameImagePackage, setGameImagePackage] = useState(undefined);
   const [gameCharacters, setGameCharacters] = useState([]);
   const [foundCharacters, setFoundCharacters] = useState([]);
   const [showResultModal, setShowResultModal] = useState(false);
@@ -50,10 +49,14 @@ function App() {
   };
 
   const handleImageChoice = (e) => {
-    const gameImageUrl = e.target.src;
-    setGameImageUrl(gameImageUrl);
-    const gameImageName = extractFileName(gameImageUrl);
-    const docRef = doc(db, 'locations', gameImageName);
+    const image = e.target;
+    const gameImagePackage = {
+      title: image.dataset.imagetitle,
+      filename: image.dataset.imagefilename,
+      url: image.src,
+    };
+    setGameImagePackage(gameImagePackage);
+    const docRef = doc(db, 'locations', gameImagePackage.filename);
     getDoc(docRef).then((snapshot) => {
       const data = snapshot.data();
       const characters = Object.keys(data);
@@ -74,7 +77,7 @@ function App() {
   };
 
   const checkCharacterCoords = (character, boxCoords) => {
-    const docRef = doc(db, 'locations', extractFileName(gameImageUrl));
+    const docRef = doc(db, 'locations', gameImagePackage.filename);
     getDoc(docRef).then((snapshot) => {
       const data = snapshot.data();
       if (
@@ -116,7 +119,7 @@ function App() {
     addDoc(scoresRef, {
       id: uniqid(),
       username: e.target.username.value,
-      picture: extractFileName(gameImageUrl),
+      picture: gameImagePackage.title,
       time: latestTime,
     });
     setLatestTime(null);
@@ -131,16 +134,7 @@ function App() {
     navigate('/');
   };
 
-  //* This is temporarily for getting game images to not tap the database too much in development
   useEffect(() => {
-    setMenuImageUrls([
-      './tempAssets/beach.jpg',
-      './tempAssets/gobbling.jpg',
-      './tempAssets/racing.jpg',
-      './tempAssets/skiing.jpg',
-      './tempAssets/space.jpg',
-      './tempAssets/worldwide.jpg',
-    ]);
     getOrderedScores();
   }, []);
 
@@ -148,35 +142,29 @@ function App() {
     checkAllCharactersFound();
   }, [foundCharacters]);
 
-  //! SAVE THIS CODE
-  //!===========================================================================
-  // useEffect(() => {
-  //   listAll(waldoImages)
-  //     .then((res) => {
-  //       res.items.forEach((item) => {
-  //         getDownloadURL(ref(storage, item.fullPath)).then((url) => {
-  //           setMenuImageUrls((prev) => {
-  //             if (!prev.includes(url)) {
-  //               return [...prev, url];
-  //             }
-  //             return prev;
-  //           });
-  //         });
-  //       });
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-
-  //   const scoresCollection = collection(db, 'scores');
-
-  //   getDocs(scoresCollection).then((snapshot) => {
-  //     const scoresDocs = snapshot.docs.map((doc) => {
-  //       return { ...doc.data(), id: doc.id };
-  //     });
-  //     setScores(scoresDocs);
-  //   });
-  // }, []);
+  useEffect(() => {
+    listAll(waldoImages)
+      .then((res) => {
+        res.items.forEach((item) => {
+          getDownloadURL(ref(storage, item.fullPath)).then((url) => {
+            setMenuImagePackages((prev) => {
+              if (prev.some((imagePackage) => imagePackage.url === url)) {
+                return prev;
+              }
+              const imagePackage = {
+                title: item.name.split('.')[0],
+                filename: item.name,
+                url: url,
+              };
+              return [...prev, imagePackage];
+            });
+          });
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   //!===========================================================================
 
   return (
@@ -190,7 +178,7 @@ function App() {
           path='/'
           element={
             <NewGameMenu
-              menuImageUrls={menuImageUrls}
+              menuImagePackages={menuImagePackages}
               handleImageChoice={handleImageChoice}
               clearGameCharacterList={clearGameCharacterList}
             />
@@ -200,7 +188,7 @@ function App() {
           path='/game'
           element={
             <Game
-              gameImageUrl={gameImageUrl}
+              gameImagePackage={gameImagePackage}
               gameCharacters={gameCharacters}
               foundCharacters={foundCharacters}
               checkCharacterCoords={checkCharacterCoords}
