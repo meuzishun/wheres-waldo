@@ -4,10 +4,10 @@ This project was created as part of the curriculum of [The Odin Project](https:/
 
 ## Technologies Used
 
-• React
-• React-router-dom
-• Firestore
-• Firebase Storage
+• React\
+• React-router-dom\
+• Firestore\
+• Firebase Storage\
 • Firebase Hosting
 
 ---
